@@ -320,7 +320,7 @@ export default function Programs() {
                     </div>
                   </div>
                   
-                  <Link to={`/program/${program.slug}`}>
+                  <Link to={`/programs/${program.slug}`}>
                     <Button className="w-full bg-brand-gradient hover:opacity-90">
                       View Program
                       <ArrowRight className="h-4 w-4 ml-2" />

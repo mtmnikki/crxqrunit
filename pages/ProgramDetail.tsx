@@ -183,7 +183,7 @@ function FileRow({ id, name, filePath, fileUrl, link, duration, mimeType, bookma
 }
 
 export default function ProgramDetail() {
-  const { id } = useParams<{ id: string }>()
+  const { slug } = useParams<{ slug: string }>()
   const [program, setProgram] = useState<ProgramDetailUI | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -233,7 +233,7 @@ export default function ProgramDetail() {
   }
 
   useEffect(() => {
-    if (!id) return
+    if (!slug) return
 
     let mounted = true
     async function loadProgram() {
@@ -241,14 +241,14 @@ export default function ProgramDetail() {
         setLoading(true)
         setError('')
 
-        console.log('Loading program with ID:', id)
-        
-        // Find program by slug first, then by ID
-        const { data: programData, error: programError } = await supabase
-          .from('programs')
-          .select('*')
-          .eq('slug', id)
-          .maybeSingle()
+      console.log('Loading program with slug:', slug)
+
+      // Find program by slug first, then by ID
+      const { data: programData, error: programError } = await supabase
+        .from('programs')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle()
         
         if (programError) {
           console.error('Program query error:', programError)
