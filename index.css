@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .text-brand-gradient {
+    @apply bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400 bg-clip-text text-transparent;
+  }
+  
+  .bg-brand-gradient {
+    @apply bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-400;
+  }
+  
+  .bg-brand-gradient-subtle {
+    @apply bg-gradient-to-r from-blue-600 to-cyan-500;
+  }
+}
