@@ -182,21 +182,33 @@ export const useAuth = create<AuthState>()(
 
       logout: async () => {
         console.log('🚪 Logging out...');
-        try {
-          await supabase.auth.signOut();
-          console.log('✅ Supabase signout successful');
-        } catch (error) {
-          console.error('❌ Logout error:', error);
+
+        // Clear local session first to prevent rehydration if network call fails
+        const { error: localError } = await supabase.auth.signOut({ scope: 'local' });
+        if (localError) {
+          console.error('❌ Local logout error:', localError);
         }
-        
-        // Clear state immediately
+
+        // Attempt global sign out (network)
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+          console.error('❌ Supabase signout error:', error);
+        } else {
+          console.log('✅ Supabase signout successful');
+        }
+
+        // Clear auth state and persisted storage
         set({ user: null, isAuthenticated: false, isLoading: false });
-        
-        // Clear persisted storage
         localStorage.removeItem('auth-storage');
-        
+
+        // Remove any auth-related query or hash params
+        const url = new URL(window.location.href);
+        url.search = '';
+        url.hash = '';
+        window.history.replaceState({}, document.title, url.pathname);
+
         // Force redirect to login page
-        window.location.href = '/login';
+        window.location.assign('/login');
       },
 
       setUser: (user: User | null) => {
@@ -257,7 +269,7 @@ export const useAuth = create<AuthState>()(
 )
 
 // Initialize auth state on app load
-supabase.auth.onAuthStateChange(async (event, session) => {
+supabase.auth.onAuthStateChange(async (event) => {
   const { initialize } = useAuth.getState()
   if (event === 'SIGNED_IN' || event === 'SIGNED_OUT' || event === 'TOKEN_REFRESHED') {
     await initialize()

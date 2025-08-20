@@ -180,13 +180,13 @@ export const router = createBrowserRouter([
           </Suspense>
         )
       },
-      {
-        path: 'program/:id',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <ProgramDetail />
-          </Suspense>
-        )
+        {
+          path: 'programs/:slug',
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <ProgramDetail />
+            </Suspense>
+          )
       }
     ]
   },

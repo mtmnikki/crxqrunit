@@ -218,7 +218,7 @@ export default function Dashboard() {
            {programs.map((program) => {
              const Icon = getIconForProgram(program.name)
              return (
-               <Link key={program.slug} to={`/program/${program.slug}`}>
+              <Link key={program.slug} to={`/programs/${program.slug}`}>
                  <Card className="group border-blue-50 hover:border-blue-200 hover:shadow-md">
                    <CardHeader className="pb-1.5">
                      <div className="flex items-center justify-between">
